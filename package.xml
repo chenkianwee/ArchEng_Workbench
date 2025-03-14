@@ -5,7 +5,7 @@
   <version>0.0.1</version>
   <maintainer email="chenkianwee@gmail.com">Kian Wee Chen</maintainer>
   <license file="LICENSE">GNU General Public License v3.0</license>
-  <url type="repository" branch="master">https://github.com/chenkianwee/ArchEng_Workbench</url>
+  <url type="repository" branch="main">https://github.com/chenkianwee/ArchEng_Workbench</url>
   <url type="website">https://github.com/chenkianwee/ArchEng_Workbench</url>
 
   <content>
