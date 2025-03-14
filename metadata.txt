@@ -1,0 +1,4 @@
+; metadata.txt
+[general]
+name=ArchEng
+description=Workbench with Architecture Engineering functions

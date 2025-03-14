@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
+  <name>ArchEng</name>
+  <description>Workbench with Architecture Engineering functions</description>
+  <version>0.0.1</version>
+  <maintainer email="chenkianwee@gmail.com">Kian Wee Chen</maintainer>
+  <license file="LICENSE">GNU General Public License v3.0</license>
+  <url type="repository" branch="master">https://github.com/chenkianwee/ArchEng_Workbench</url>
+  <url type="website">https://github.com/chenkianwee/ArchEng_Workbench</url>
+
+  <content>
+    <workbench>
+      <classname>ArchEngWorkbench</classname>
+      <subdirectory>./</subdirectory>
+    </workbench>
+  </content>
+
+</package>
