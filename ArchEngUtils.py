@@ -1,4 +1,7 @@
+import FreeCAD
 from PySide import QtGui
+import freecad.utils as utils
+import addonmanager_utilities as amutils
 
 import settings
 
@@ -13,6 +16,8 @@ def install_packages(packages: list[str]):
         def tr(context, text):
             return QtGui.QApplication.translate(context, text, None)
 
+    import os
+    import platform
     import importlib
     try:
         for package in packages:
@@ -23,19 +28,42 @@ def install_packages(packages: list[str]):
                                       tr(__Name__, f"Dependencies Installed"), 
                                       tr(__Name__, f"All dependencies satisfied"))
     except ImportError:
-        cmdlist = ['pip', 'install']
+        # figure out what platform OS
+        py_exe = utils.get_python_exe()
+        if os.path.exists(py_exe) == False:
+            FreeCAD.Console.PrintNotification(f"python_exe path does not exist!")
+
+        system_name = platform.system()
+        if system_name == 'Linux':
+            command = [py_exe, '-m', 'pip', 'install']
+            
+        elif system_name == 'Windows' or system_name == 'Darwin':
+            vendor_path = amutils.get_pip_target_directory()
+            command = [py_exe, '-m', 'pip', 'install', '--target', vendor_path]
+        
         for package in packages:
-            cmdlist.append(package)
-        cmdlist.append('--user')
+            command.append(package)
+
         answer = QtGui.QMessageBox.question(None,
                     tr(__Name__, f"Install Dependencies"),
-                    tr(__Name__, f"Install {cmdlist} by executing pip?"))
+                    tr(__Name__, f"Install dependencies by executing '{command}'?"))
         if answer == QtGui.QMessageBox.StandardButton.Yes:
             import subprocess
-            proc = subprocess.Popen(cmdlist, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = proc.communicate()
-            print(out.decode())
-            print(err.decode())
+            try:
+                result = subprocess.run(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    check=True
+                )
+                FreeCAD.Console.PrintNotification(f"{result.stdout}\n")
+
+            except subprocess.CalledProcessError as e:
+                FreeCAD.Console.PrintError(f"Error: {e.stderr}\n")
+            except Exception as e:
+                FreeCAD.Console.PrintError(f"An unexpected error occurred: {e}\n")
+
             QtGui.QMessageBox.information(None, 
                                           tr(__Name__, f"Restart FreeCAD"), 
                                           tr(__Name__, f"Please restart FreeCAD for the installation to take effect."))
@@ -43,3 +71,9 @@ def install_packages(packages: list[str]):
             QtGui.QMessageBox.information(None, 
                                           tr(__Name__, f"Dependencies Not Installed"), 
                                           tr(__Name__, f"This command requires {packages} to function. Install {packages} by answering Yes"))
+            
+
+
+        
+
+        
