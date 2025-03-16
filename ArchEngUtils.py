@@ -17,6 +17,7 @@ def install_packages(packages: list[str]):
             return QtGui.QApplication.translate(context, text, None)
 
     import os
+    import sys
     import platform
     import importlib
     try:
@@ -33,9 +34,15 @@ def install_packages(packages: list[str]):
         if os.path.exists(py_exe) == False:
             FreeCAD.Console.PrintNotification(f"python_exe path does not exist!")
 
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
         system_name = platform.system()
         if system_name == 'Linux':
-            command = [py_exe, '-m', 'pip', 'install']
+            if "APPIMAGE" in os.environ:            
+                os.environ['PYTHONHOME'] = '/usr'
+                os.environ['PYTHONPATH'] = f"/usr/lib/python{python_version}/site-packages"
+                command = [py_exe, '-m', 'pip', 'install', '--target', vendor_path]
+            else:
+                command = [py_exe, '-m', 'pip', 'install']
             
         elif system_name == 'Windows' or system_name == 'Darwin':
             vendor_path = amutils.get_pip_target_directory()

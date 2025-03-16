@@ -1,4 +1,4 @@
-import FreeCAD, FreeCADGui
+import FreeCADGui
 from PySide import QtGui
 from PySide.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLineEdit, QFileDialog
 import settings
